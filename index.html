@@ -1,10 +1,10 @@
-<html>
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>企業方案需求表｜Aspect English</title>
+
   <style>
     body {
       font-family: "Noto Sans TC", Arial, sans-serif;
@@ -15,7 +15,7 @@
     }
 
     .container {
-      max-width: 760px;
+      max-width: 780px;
       margin: 40px auto;
       background: #fffaf6;
       padding: 32px;
@@ -23,10 +23,18 @@
       box-shadow: 0 4px 18px rgba(0,0,0,0.08);
     }
 
+    .logo {
+      text-align: center;
+      font-size: 30px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      color: #4a2118;
+      margin-bottom: 10px;
+    }
+
     h1 {
       text-align: center;
       margin-bottom: 8px;
-      color: #3b1f17;
     }
 
     .subtitle {
@@ -36,7 +44,7 @@
     }
 
     .section {
-      margin-bottom: 24px;
+      margin-bottom: 22px;
     }
 
     label {
@@ -90,6 +98,15 @@
       display: none;
     }
 
+    .notice {
+      background: #f1e5df;
+      padding: 14px;
+      border-radius: 10px;
+      line-height: 1.7;
+      margin-bottom: 20px;
+      color: #4a2118;
+    }
+
     button {
       width: 100%;
       padding: 15px;
@@ -105,14 +122,6 @@
     button:disabled {
       background: #aaa;
       cursor: not-allowed;
-    }
-
-    .notice {
-      background: #f1e5df;
-      padding: 14px;
-      border-radius: 10px;
-      line-height: 1.6;
-      margin-bottom: 20px;
     }
 
     .msg {
@@ -136,10 +145,14 @@
 
 <body>
   <div class="container">
-    <h1>企業英文培訓需求表</h1>
-    <div class="subtitle">Aspect English 雅斯貝互動英語認證中心</div>
+
+    <div class="logo">Aspect English</div>
+
+    <h1>企業多益英文培訓需求表</h1>
+    <div class="subtitle">雅斯貝互動英語認證中心</div>
 
     <form id="enterpriseForm">
+
       <div class="section">
         <label>請選擇方案類型 *</label>
         <div class="radio-group">
@@ -158,8 +171,27 @@
       </div>
 
       <div class="notice" id="trainingNotice">
-        企業內訓標準可安排時段為 <strong>下午 13:00–16:00</strong>。  
+        企業內訓標準可安排時段為 <strong>下午 13:00–16:00</strong>。<br>
         若需其他時段，可於「其他時段需求」欄位填寫。
+      </div>
+
+      <div class="section">
+        <label>課程種類 *</label>
+        <select name="course_type" required>
+          <option value="">請選擇課程種類</option>
+          <option>多益口說</option>
+          <option>多益寫作</option>
+          <option>多益口說及寫作</option>
+          <option>生活口說</option>
+          <option>多益短期班（一個月）</option>
+          <option>多益短期班（半年）</option>
+          <option>多益保證班（聽力及閱讀）</option>
+        </select>
+      </div>
+
+      <div class="notice">
+        ※ 多益保證班及口說課程會依照企業人數、時數與需求內容另行評估。<br>
+        ※ 我們會依據您填寫的內容，由專人確認後提供正式報價單。
       </div>
 
       <div class="section">
@@ -179,35 +211,34 @@
 
       <div class="section">
         <label>E-mail *</label>
-        <input type="email" name="email" required>
+        <input type="email" name="email" required placeholder="example@gmail.com">
       </div>
 
       <div class="section">
         <label>預計人數 *</label>
-        <input 
-        type="number" 
-        name="people_count" 
-        min="1" 
-        required 
-        placeholder="請輸入預計上課人數，例如：12"
-      >
+        <input
+          type="text"
+          name="people_count"
+          required
+          placeholder="請輸入明確人數，例如：12；若尚未確認請填暫無"
+        >
       </div>
 
       <div class="section">
         <label>預計總時數 *</label>
-        <input 
-        type="number" 
-        name="total_hours" 
-        min="1" 
-        required 
-        placeholder="請輸入預計總時數，例如：24"
-      >
+        <input
+          type="text"
+          name="total_hours"
+          required
+          placeholder="請輸入明確時數，例如：24；若尚未確認請填暫無"
+        >
       </div>
 
       <div class="section">
         <label>預算範圍 *</label>
         <select name="budget" required>
           <option value="">請選擇</option>
+          <option>暫無</option>
           <option>3萬元以下</option>
           <option>3萬-5萬元</option>
           <option>5萬-10萬元</option>
@@ -217,12 +248,24 @@
 
       <div class="section">
         <label id="weeklyLabel">每週上課次數 *</label>
-        <select name="weekly_count" required>
+        <select name="weekly_count" id="weeklyCount" required>
           <option value="">請選擇</option>
-          <option>1次 / 1天</option>
-          <option>2次 / 2天</option>
-          <option>3次以上</option>
+          <option>1週 / 1次</option>
+          <option>1週 / 2次</option>
+          <option>1週 / 3次</option>
+          <option>暫無</option>
+          <option>其他</option>
         </select>
+      </div>
+
+      <div class="section hidden" id="weeklyOtherBox">
+        <label>其他上課次數 *</label>
+        <input
+          type="text"
+          name="weekly_other"
+          id="weeklyOtherInput"
+          placeholder="例如：兩週一次、依企業排班安排"
+        >
       </div>
 
       <div id="trainingFields">
@@ -233,7 +276,13 @@
 
         <div class="section">
           <label>上課地點 *</label>
-          <input type="text" name="location" id="locationInput" placeholder="請填寫企業上課地址或區域" required>
+          <input
+            type="text"
+            name="location"
+            id="locationInput"
+            placeholder="請填寫企業上課地址或區域"
+            required
+          >
         </div>
       </div>
 
@@ -245,13 +294,13 @@
       </div>
 
       <div class="section">
-        <label>希望開課日期 *</label>
-        <input type="date" name="start_date" required>
+        <label>希望開課月份 *</label>
+        <input type="month" name="start_date" required>
       </div>
 
       <div class="section">
         <label>備註</label>
-        <textarea name="note" placeholder="可填寫課程目標、員工需求、希望加強方向等"></textarea>
+        <textarea name="note" placeholder="可填寫課程目標、特殊需求、希望加強方向等"></textarea>
       </div>
 
       <button type="submit" id="submitBtn">送出需求</button>
@@ -272,6 +321,22 @@
     const groupFields = document.getElementById('groupFields');
     const trainingNotice = document.getElementById('trainingNotice');
     const weeklyLabel = document.getElementById('weeklyLabel');
+    const locationInput = document.getElementById('locationInput');
+
+    const weeklyCount = document.getElementById('weeklyCount');
+    const weeklyOtherBox = document.getElementById('weeklyOtherBox');
+    const weeklyOtherInput = document.getElementById('weeklyOtherInput');
+
+    weeklyCount.addEventListener('change', () => {
+      if (weeklyCount.value === '其他') {
+        weeklyOtherBox.classList.remove('hidden');
+        weeklyOtherInput.required = true;
+      } else {
+        weeklyOtherBox.classList.add('hidden');
+        weeklyOtherInput.required = false;
+        weeklyOtherInput.value = '';
+      }
+    });
 
     document.querySelectorAll('input[name="type"]').forEach(radio => {
       radio.addEventListener('change', () => {
@@ -284,7 +349,7 @@
           groupFields.classList.add('hidden');
           trainingNotice.classList.remove('hidden');
           weeklyLabel.textContent = '每週上課次數 *';
-          document.getElementById('locationInput').required = true;
+          locationInput.required = true;
         } else {
           cardGroup.classList.add('active');
           cardTraining.classList.remove('active');
@@ -292,7 +357,8 @@
           trainingFields.classList.add('hidden');
           trainingNotice.classList.add('hidden');
           weeklyLabel.textContent = '每週到班天數 *';
-          document.getElementById('locationInput').required = false;
+          locationInput.required = false;
+          locationInput.value = '';
         }
       });
     });
@@ -307,6 +373,16 @@
       const formData = new FormData(form);
       const type = formData.get('type');
 
+      let email = formData.get('email') || '';
+      if (email && !email.includes('.')) {
+        email = email + '.com';
+      }
+
+      let weeklyValue = formData.get('weekly_count');
+      if (weeklyValue === '其他') {
+        weeklyValue = formData.get('weekly_other') || '其他';
+      }
+
       const otherTime =
         type === '企業內訓'
           ? formData.get('other_time')
@@ -314,14 +390,15 @@
 
       const data = {
         type: type,
+        course_type: formData.get('course_type'),
         company_name: formData.get('company_name'),
         contact_name: formData.get('contact_name'),
         phone: formData.get('phone'),
-        email: formData.get('email'),
+        email: email,
         people_count: formData.get('people_count'),
         total_hours: formData.get('total_hours'),
         budget: formData.get('budget'),
-        weekly_count: formData.get('weekly_count'),
+        weekly_count: weeklyValue,
         other_time: otherTime,
         start_date: formData.get('start_date'),
         location: type === '企業內訓' ? formData.get('location') : '',
@@ -335,8 +412,11 @@
           body: JSON.stringify(data)
         });
 
+        alert('已送出成功！系統將寄送確認信至您的 E-mail，後續將由專人確認需求並與您聯繫。');
+
         msg.style.color = '#2e7d32';
-        msg.textContent = '已送出成功，我們將由專人與您聯繫。';
+        msg.textContent = '已送出成功，我們將由專人確認需求並與您聯繫。';
+
         form.reset();
 
         cardTraining.classList.add('active');
@@ -344,6 +424,12 @@
         trainingFields.classList.remove('hidden');
         groupFields.classList.add('hidden');
         trainingNotice.classList.remove('hidden');
+        weeklyLabel.textContent = '每週上課次數 *';
+        locationInput.required = true;
+
+        weeklyOtherBox.classList.add('hidden');
+        weeklyOtherInput.required = false;
+        weeklyOtherInput.value = '';
 
       } catch (error) {
         msg.style.color = '#c62828';
@@ -355,6 +441,4 @@
     });
   </script>
 </body>
-</html>
-
 </html>
