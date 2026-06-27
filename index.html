@@ -181,13 +181,22 @@
     .notice {
       max-width: 820px;
       margin: 0 auto 24px;
-      background: #f1e5df;
-      padding: 14px;
+      background: #f8eee8;
+      border-left: 5px solid #a9764c;
+      padding: 18px 20px;
       border-radius: 10px;
-      line-height: 1.6;
+      line-height: 1.9;
       color: #4a2118;
       box-sizing: border-box;
+      font-size: 15px;
     }
+
+    .notice p{
+    text-align: justify;
+    text-justify: inter-ideograph;
+    line-height: 1.9;
+    margin: 0 0 16px 0;
+}
 
     button {
       width: 100%;
@@ -346,8 +355,17 @@
       </div>
 
       <div class="notice">
-        ※ 多益保證班及口說課程會依照企業人數、時數與需求內容另行評估。<br>
-        ※ 我們會依據您填寫的內容，由專人確認後提供正式報價單。
+      <strong>課程說明：</strong><br><br>
+      
+      <p>
+      ※ <strong>多益保證班</strong>：課程方案將依企業人數、授課時數及培訓需求另行評估。學員完成一年課程並於規定期限內報考 TOEIC 後，若未達報名時所約定之保證分數，可繳交 <strong>NT$5,000</strong> 續課報名費，延續下一年度課程，無其他額外費用。每年度皆適用相同續課規定，且無年限限制。<br><br>
+      </p>
+
+      <p>
+      ※ <strong>多益口說課程</strong>：採堂數制計費，最低可購買 <strong>1 堂</strong>，可依企業需求自由選購堂數；單次購買 <strong>10 堂（含）以上</strong>，課程總額享 <strong>9 折優惠</strong>。<br><br>
+      </p>
+
+      ※ 我們將依據企業人數、授課方式、課程內容及需求，由專人提供最適合的課程規劃與正式報價。
       </div>
 
       <div class="section">
@@ -676,7 +694,17 @@
           body: JSON.stringify(data)
         });
 
-        alert('已送出成功！系統將寄送確認信至您的 E-mail，後續將由專人確認需求並與您聯繫。');
+        alert(
+        `您的需求已成功送出。
+
+        系統已寄送需求確認通知至您填寫的 E-mail，請留意收件信箱。
+
+        我們將儘速審核您的需求內容，並由專人與您聯繫，進一步提供課程規劃、報價及相關說明。
+
+        感謝您的填寫，期待有機會為貴公司提供專業的企業英語培訓服務。
+
+        Aspect English 雅斯貝互動英語認證中心`
+        );
 
         msg.style.color = '#2e7d32';
         msg.textContent = '已送出成功，我們將由專人確認需求並與您聯繫。';
