@@ -425,7 +425,7 @@
         <option>21-30人</option>
         <option>31-50人</option>
         <option>50人以上</option>
-        <option>暫無</option>
+        <option>尚未確認</option>
         <option>其他</option>
       </select>
       </div>
@@ -450,7 +450,7 @@
         <option>36小時</option>
         <option>48小時</option>
         <option>60小時以上</option>
-        <option>暫無</option>
+        <option>尚未確認</option>
         <option>其他</option>
       </select>
     </div>
@@ -467,15 +467,25 @@
 
       <div class="section">
         <label>預算範圍 *</label>
-        <select name="budget" required>
+        <select name="budget" id="budget" required>
           <option value="">請選擇</option>
           <option>3萬元以下</option>
           <option>3萬-5萬元</option>
           <option>5萬-10萬元</option>
           <option>10萬元以上</option>
-          <option>暫無</option>
+          <option>尚未確認</option>
           <option>其他</option>
         </select>
+      </div>
+
+      <div class="section hidden" id="budgetOtherBox">
+        <label>請輸入預算範圍 *</label>
+        <input
+          type="text"
+          id="budgetOtherInput"
+          name="budget_other"
+          placeholder="例如：8萬元、15萬～20萬元"
+        >
       </div>
 
       <div class="section">
@@ -485,7 +495,7 @@
           <option>1週 / 1次</option>
           <option>1週 / 2次</option>
           <option>1週 / 3次</option>
-          <option>暫無</option>
+          <option>尚未確認</option>
           <option>其他</option>
         </select>
       </div>
@@ -561,6 +571,10 @@
     const hoursOtherBox = document.getElementById('hoursOtherBox');
     const hoursOtherInput = document.getElementById('hoursOtherInput');
 
+    const budget = document.getElementById('budget');
+    const budgetOtherBox = document.getElementById('budgetOtherBox');
+    const budgetOtherInput = document.getElementById('budgetOtherInput');
+
     const emailDomain = document.getElementById('emailDomain');
     const emailOtherBox = document.getElementById('emailOtherBox');
     const emailOtherInput = document.getElementById('emailOtherInput');
@@ -586,6 +600,10 @@
 
     totalHours.addEventListener('change', () => {
       toggleOther(totalHours, hoursOtherBox, hoursOtherInput);
+    });
+
+    budget.addEventListener('change', () => {
+      toggleOther(budget, budgetOtherBox, budgetOtherInput);
     });
 
     weeklyCount.addEventListener('change', () => {
@@ -660,6 +678,11 @@
 
       let email = emailAccount + emailDomainValue;
 
+      let budgetValue = formData.get('budget');
+      if (budgetValue === '其他') {
+        budgetValue = formData.get('budget_other') || '其他';
+      }
+
       let weeklyValue = formData.get('weekly_count');
       if (weeklyValue === '其他') {
         weeklyValue = formData.get('weekly_other') || '其他';
@@ -679,7 +702,7 @@
         email: email,
         people_count: peopleValue,
         total_hours: hoursValue,
-        budget: formData.get('budget'),
+        budget: budgetValue,
         weekly_count: weeklyValue,
         other_time: otherTime,
         start_date: formData.get('start_date'),
@@ -730,6 +753,10 @@
         hoursOtherBox.classList.add('hidden');
         hoursOtherInput.required = false;
         hoursOtherInput.value = '';
+
+        budgetOtherBox.classList.add('hidden');
+        budgetOtherInput.required = false;
+        budgetOtherInput.value = '';
 
         weeklyOtherBox.classList.add('hidden');
         weeklyOtherInput.required = false;
