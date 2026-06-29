@@ -237,21 +237,25 @@
       }
 
       .brand-header {
-        flex-direction: column;
+        display:flex;
         justify-content: center;
-        align-items: center;
-        gap: 4px;
+        align-items: flex-start;
+        gap: 16px;
         margin-bottom: 24px;
       }
 
       .logo {
-          width: 78px;
+          width:72px;
+          flex-shrink:0;
         }
       
       .brand-text {
-          font-size: 20px;
-          line-height: 1.1;
-          text-align: center;
+          font-size: 18px;
+          font-weight:700;
+          color:#4a2118;
+          line-height: 1;
+          margin-top:50px; /* 往下移到 Logo 下方 */
+          white-space:nowrap; /* 不要跳行 */
         }
 
 
