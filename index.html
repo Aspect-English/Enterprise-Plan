@@ -236,33 +236,25 @@
       }
 
       .brand-header {
-        display:flex;
-        justify-content: flex-start;
-        align-items: flex-start;
-        margin-bottom: 18px;
-      }
-      .brand-header {
-          display: flex;
-          justify-content: flex-start;   /* 靠左 */
-          align-items: flex-start;       /* 靠上 */
-          width:100%;
-          margin:0 0 20px 0;
-          padding-left:0;
-      }
+        display: block;
+        text-align: left;
+        margin: 0 0 34px 0;
+        padding-left: 0;
+  }
+
+      .brand-text {
+        font-size: 28px;
+        font-weight: 800;
+        color: rgba(74, 33, 24, 0.22); /* 浮水印感 */
+        letter-spacing: 0.5px;
+        line-height: 1;
+        white-space: nowrap;
+  }
 
       .logo {
-          width:58px;
-          flex-shrink:0;
-        }
-      
-      .brand-text {
-          font-size: 18px;
-          font-weight:700;
-          color:#4a2118;
-          line-height: 1;
-          margin: top 36px; /* 往下移到 Logo 下方 */
-          white-space:nowrap; /* 不要跳行 */
-        }
+        display: none;
+  }
+
 
 
       h1 {
