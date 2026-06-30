@@ -231,68 +231,64 @@
     }
 
     @media (max-width: 600px) {
-      .container {
-        margin: 16px;
-        padding:22px;
-      }
-
-      /* 手機版品牌浮水印：靠左上，Logo 在上、Aspect English 在下，不換行 */
-      .brand-header {
-        position:relative;
-        height:60px;          /* 原本約180px，改成75px即可 */
-        margin-bottom:18px;
-      }
-
-      .logo {
-        display: block !important;
-        position:absolute;
-        top:0;
-        left:0;
-        width: 40px;
-        height: auto;
-        opacity: 0.12;
-        z-index:1;
-       
-      }
-
-      /* Aspect English */
-      .brand-text{
-          position:absolute;
-          left:0;
-          top:22px;
-
-          font-size:17px;
-          font-weight:700;
-          color:rgba(74,33,24,.15);
-
-          white-space:nowrap;   /* 不跳行 */
-          z-index:2;
+  .container {
+    margin: 16px;
+    padding: 22px;
   }
 
-      h1{
-      font-size:28px;
-      line-height:1.3;
-      margin-top:0;
+  .brand-header {
+    position: relative;
+    height: 80px;
+    margin-bottom: 8px;
   }
 
-      .subtitle{
-      font-size:15px;
-      margin-bottom:24px;
+  .logo {
+    display: block !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 48px;
+    height: auto;
+    opacity: 0.18;
+    z-index: 2;
   }
 
-      .radio-group {
-        flex-direction: column;
-      }
+  .brand-text {
+    position: absolute;
+    left: 0;
+    top: 34px;
+    font-size: 18px;
+    font-weight: 700;
+    color: rgba(74, 33, 24, 0.18);
+    white-space: nowrap;
+    line-height: 1;
+    z-index: 1;
+  }
 
-      .radio-card,
-      .course-card {
-        width: 100%;
-      }
+  h1 {
+    font-size: 28px;
+    line-height: 1.3;
+    margin-top: 0;
+  }
 
-      .course-grid {
-        grid-template-columns: 1fr;
-      }
-    }
+  .subtitle {
+    font-size: 15px;
+    margin-bottom: 24px;
+  }
+
+  .radio-group {
+    flex-direction: column;
+  }
+
+  .radio-card,
+  .course-card {
+    width: 100%;
+  }
+
+  .course-grid {
+    grid-template-columns: 1fr;
+  }
+}
 
     .email-row {
       display: grid;
