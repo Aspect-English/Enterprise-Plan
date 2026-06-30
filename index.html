@@ -239,33 +239,34 @@
       /* 手機版品牌浮水印：靠左上，Logo 在上、Aspect English 在下，不換行 */
       .brand-header {
         position:relative;
-        height:75px;          /* 原本約180px，改成75px即可 */
-        margin-bottom:10px;
+        height:60px;          /* 原本約180px，改成75px即可 */
+        margin-bottom:18px;
       }
 
       .logo {
-        display: block;
-        width: 38px;
-        height: auto;
-        opacity: .12;
+        display: block !important;
         position:absolute;
         top:0;
         left:0;
+        width: 40px;
+        height: auto;
+        opacity: 0.12;
+        z-index:1;
+       
       }
 
       /* Aspect English */
       .brand-text{
           position:absolute;
           left:0;
-          top:18px;
+          top:22px;
 
-          font-size:18px;
+          font-size:17px;
           font-weight:700;
           color:rgba(74,33,24,.15);
 
           white-space:nowrap;   /* 不跳行 */
-          letter-spacing:.2px;
-          line-height:1;
+          z-index:2;
   }
 
       h1{
