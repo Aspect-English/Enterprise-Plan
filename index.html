@@ -231,64 +231,66 @@
     }
 
     @media (max-width: 600px) {
-  .container {
-    margin: 16px;
-    padding: 22px;
-  }
+      .container {
+        margin: 16px;
+        padding: 22px;
+      }
 
-  .brand-header {
-    position: relative;
-    height: 95px;
-    margin-bottom: 22px;
-  }
+      /* 手機版品牌區：使用 logo.png，左上浮水印感，並避免和主標題重疊 */
+      .brand-header {
+        position: relative;
+        height: 88px;
+        margin-bottom: 12px;
+      }
 
-  .logo {
-    display: block !important;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 48px;
-    height: auto;
-    opacity: 0.30;
-    z-index: 2;
-  }
+      .logo {
+        display: block !important;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 48px;
+        height: auto;
+        opacity: 0.75; /* logo.png 本身偏淡，所以不要設太低 */
+        z-index: 1;
+      }
 
-  .brand-text {
-    position: absolute;
-    left: 0;
-    top: 22px;
-    font-size: 17px;
-    font-weight: 700;
-    color: rgba(74, 33, 24, 0.18);
-    white-space: nowrap;
-    line-height: 1;
-    z-index: 2;
-  }
+      .brand-text {
+        position: absolute;
+        left: 0;
+        top: 42px;
+        font-size: 17px;
+        font-weight: 700;
+        color: rgba(74, 33, 24, 0.18);
+        white-space: nowrap;
+        line-height: 1;
+        letter-spacing: 0.2px;
+        z-index: 2;
+      }
 
-  h1 {
-    font-size: 28px;
-    line-height: 1.3;
-    margin-top: 0;
-  }
+      h1 {
+        font-size: 28px;
+        line-height: 1.3;
+        margin-top: 0;
+      }
 
-  .subtitle {
-    font-size: 15px;
-    margin-bottom: 24px;
-  }
+      .subtitle {
+        font-size: 15px;
+        margin-bottom: 24px;
+      }
 
-  .radio-group {
-    flex-direction: column;
-  }
+      .radio-group {
+        flex-direction: column;
+      }
 
-  .radio-card,
-  .course-card {
-    width: 100%;
-  }
+      .radio-card,
+      .course-card {
+        width: 100%;
+      }
 
-  .course-grid {
-    grid-template-columns: 1fr;
-  }
-}
+      .course-grid {
+        grid-template-columns: 1fr;
+      }
+    }
 
     .email-row {
       display: grid;
