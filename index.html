@@ -236,34 +236,35 @@
         padding: 22px;
       }
 
-      /* 手機版品牌區：Logo 與文字分開，避免重疊 */
+      /* 手機版品牌區：Logo 在左上、Aspect English 在下方，避免重疊 */
       .brand-header {
-       position:relative;
-        height:95px;
-        margin-bottom:8px;
-          }
+        position: relative;
+        display: block;
+        height: 88px;
+        margin-bottom: 10px;
+      }
 
       .logo {
-        position:absolute;
-        top:-18px;
-        left: 0px;
         display: block !important;
+        position: absolute;
+        top: -12px;
+        left: 8px;
         width: 58px;
         height: auto;
         opacity: 1;
         filter: none !important;
         mix-blend-mode: normal !important;
-        margin-left: 72px;
-        z-index:3;
+        margin: 0;
+        z-index: 3;
       }
 
       .brand-text {
-        position:absolute;
-        top: 48px;            /* 更靠近 Logo */
-        left:0;
-        width:auto;
-        text-align:left;
+        position: absolute;
+        top: 50px;
+        left: 0;
+        width: auto;
         display: block;
+        text-align: left;
         font-size: 17px;
         font-weight: 700;
         color: rgba(74, 33, 24, 0.18);
@@ -271,7 +272,7 @@
         line-height: 1;
         letter-spacing: 0.3px;
         margin: 0;
-        z-index:2;
+        z-index: 2;
       }
 
       h1 {
