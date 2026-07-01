@@ -236,35 +236,35 @@
         padding: 22px;
       }
 
-      /* 手機版品牌區：使用 logo.png，左上浮水印感，並避免和主標題重疊 */
+      /* 手機版品牌區：Logo 與文字分開，避免重疊 */
       .brand-header {
-        position: relative;
-        height: 85px;
-        margin-bottom: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        height: auto;
+        margin: 0 0 36px 0;
       }
 
       .logo {
         display: block !important;
-        position: absolute;
-        top: -26px;      /* 往上移 */
-        left: 20px;
-        width: 54px;
+        width: 58px;
         height: auto;
-        opacity: 0.9;
-        z-index: 3;
-        filter:none;
-}
+        opacity: 1;
+        filter: none !important;
+        mix-blend-mode: normal !important;
+        margin-left: 72px;
+      }
 
       .brand-text {
-        position: absolute;
-        left: 0;
-        top: 46px;
-        font-size: 17px;
+        display: block;
+        font-size: 18px;
         font-weight: 700;
-        color: rgba(74, 33, 24, 0.16);
+        color: rgba(74, 33, 24, 0.18);
         white-space: nowrap;
         line-height: 1;
-        z-index: 2;
+        letter-spacing: 0.3px;
+        margin: 0;
       }
 
       h1 {
