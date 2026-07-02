@@ -569,9 +569,17 @@
 
       <div class="section">
         <label>希望開課月份 *</label>
-        <input type="month" name="start_date" required>
+        <select name="start_date" id="startDate" required>
+          <option value="">請選擇</option>
+          <option value="尚未規劃">尚未規劃</option>
+          <option value="指定月份">指定月份</option>
+        </select>
       </div>
 
+<div class="section hidden" id="startMonthBox">
+  <label>請選擇希望開課月份 *</label>
+  <input type="month" id="startMonthInput" name="start_month">
+</div>
       <div class="section">
         <label>備註</label>
         <textarea name="note" placeholder="可填寫課程目標、員工需求、希望加強方向等"></textarea>
@@ -616,6 +624,10 @@
     const emailDomain = document.getElementById('emailDomain');
     const emailOtherBox = document.getElementById('emailOtherBox');
     const emailOtherInput = document.getElementById('emailOtherInput');
+    
+    const startDate = document.getElementById('startDate');
+    const startMonthBox = document.getElementById('startMonthBox');
+    const startMonthInput = document.getElementById('startMonthInput');
 
     function toggleOther(selectEl, targetBox, targetInput) {
       if (selectEl.value === '其他') {
@@ -646,6 +658,17 @@
 
     weeklyCount.addEventListener('change', () => {
       toggleOther(weeklyCount, weeklyOtherBox, weeklyOtherInput);
+    });
+
+    startDate.addEventListener('change', () => {
+      if (startDate.value === '指定月份') {
+        startMonthBox.classList.remove('hidden');
+        startMonthInput.required = true;
+      } else {
+        startMonthBox.classList.add('hidden');
+        startMonthInput.required = false;
+        startMonthInput.value = '';
+      }
     });
 
     document.querySelectorAll('input[name="course_type"]').forEach(input => {
@@ -743,7 +766,9 @@
         budget: budgetValue,
         weekly_count: weeklyValue,
         other_time: otherTime,
-        start_date: formData.get('start_date'),
+        start_date: formData.get('start_date') === '指定月份'
+        ? formData.get('start_month')
+        : formData.get('start_date'),
         location: type === '企業內訓' ? formData.get('location') : '',
         note: formData.get('note')
       };
@@ -756,16 +781,16 @@
         });
 
         alert(
-        `您的需求已成功送出。
+          `您的需求已成功送出。
 
-        系統已寄送需求確認通知至您填寫的 E-mail，請留意收件信箱。
+          系統已寄送需求確認通知至您填寫的 E-mail，請留意收件信箱。
 
-        我們將儘速審核您的需求內容，並由專人與您聯繫，進一步提供課程規劃、報價及相關說明。
+          我們將儘速審核您的需求內容，並由專人與您聯繫，進一步提供課程規劃、報價及相關說明。
 
-        感謝您的填寫，期待有機會為貴公司提供專業的企業英語培訓服務。
+          Aspect English 雅斯貝互動英語認證中心
 
-        Aspect English 雅斯貝互動英語認證中心`
-        );
+          感謝您的填寫，期待有機會為貴公司提供專業的企業英語培訓服務。`
+          );
 
         msg.style.color = '#2e7d32';
         msg.textContent = '已送出成功，我們將由專人確認需求並與您聯繫。';
