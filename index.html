@@ -83,22 +83,23 @@
       font-size: 15px;
       box-sizing: border-box;
       background: white;
-      display: block;}
-      
-    input,
-      select {
-      height: 48px;}
-    
+      display: block;
+}
+
+  input,
+  select {
+  height: 48px;
+}
+
+input[type="month"] {
+  height: 48px;
+  line-height: 48px;
+}
 
 textarea {
   min-height: 72px;
-    }
-
-    textarea {
-      min-height: 72px;
-      resize: vertical;
-    }
-
+  resize: vertical;
+}
     .radio-group {
       display: flex;
       justify-content: flex-start;
@@ -832,6 +833,9 @@ textarea {
         weeklyOtherBox.classList.add('hidden');
         weeklyOtherInput.required = false;
         weeklyOtherInput.value = '';
+        startMonthBox.classList.add('hidden');
+        startMonthInput.required = false;
+        startMonthInput.value = '';
 
         document.querySelectorAll('.course-card').forEach(card => {
           card.classList.remove('active');
