@@ -59,7 +59,7 @@
       text-align: center;
       color: #755143;
       font-size: 17px;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
 
     .section {
@@ -400,12 +400,12 @@ textarea {
 
           <label class="course-card">
             <input type="checkbox" name="course_type" value="多益短期班（一個月）">
-            多益短期班（一個月）
+            多益短期班（以月為單位）
           </label>
 
           <label class="course-card">
             <input type="checkbox" name="course_type" value="多益短期班（半年）">
-            多益短期班（半年）
+            多益短期班（以年為單位）
           </label>
 
           <label class="course-card">
@@ -423,7 +423,7 @@ textarea {
       </p>
 
       <p>
-      ※ <strong>多益口說課程</strong>：採堂數制計費，最低可購買 <strong>1 堂</strong>，可依企業需求自由選購堂數；單次購買 <strong>10 堂（含）以上</strong>，課程總額享 <strong>9 折優惠</strong>。<br><br>
+      ※ <strong>多益口說/寫作課程</strong>：採堂數制計費，最低可購買 <strong>1 堂</strong>，可依企業需求自由選購堂數；單次購買 <strong>10 堂（含）以上</strong>，課程總額享 <strong>9 折優惠</strong>。<br><br>
       </p>
 
       ※ 我們將依據企業人數、授課方式、課程內容及需求，由專人提供最適合的課程規劃與正式報價。
@@ -566,16 +566,7 @@ textarea {
         <input type="text" name="weekly_other" id="weeklyOtherInput" placeholder="例如：兩週一次、依企業排班安排">
       </div>
 
-      <div class="notice" id="trainingNotice">
-        企業內訓暫定可安排時段為 <strong>下午 13:00–16:00</strong>。  
-        若有其他時段需求，再麻煩於下方欄位填寫。
-      </div>
-
-      <div id="trainingFields">
-        <div class="section">
-          <label>其他時段需求</label>
-          <textarea name="other_time" placeholder="例如：每週五 14:00-16:00、希望改上午、需另行討論等"></textarea>
-        </div>
+      
 
         <div class="section">
           <label>上課地點 *</label>
@@ -603,6 +594,18 @@ textarea {
   <label>請選擇希望開課月份 *</label>
   <input type="month" id="startMonthInput" name="start_month">
 </div>
+
+<div class="notice" id="trainingNotice">
+        企業內訓暫定可安排時段為 <strong>下午 13:00–16:00</strong>。  
+        若有其他時段需求，再麻煩於下方欄位填寫。
+      </div>
+
+      <div id="trainingFields">
+        <div class="section">
+          <label>其他時段需求</label>
+          <textarea name="other_time" placeholder="例如：每週五 14:00-16:00、希望改上午、需另行討論等"></textarea>
+        </div>
+
       <div class="section">
         <label>備註</label>
         <textarea name="note" placeholder="可填寫課程目標、員工需求、希望加強方向等"></textarea>
