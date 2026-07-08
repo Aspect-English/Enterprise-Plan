@@ -336,54 +336,58 @@ textarea {
       max-width: none;
     }
 
-    .phone-row {
-      display: grid;
-      grid-template-columns: 160px 1fr 160px;
-      gap: 10px;
-      width: 100%;
-      max-width: 820px;
-    }
+  .phone-row {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 10px;
+  width: 100%;
+  max-width: 820px;
+}
 
-    .phone-row input,
-    .phone-row select {
-      max-width: none;
-    }
+.phone-row input,
+.phone-row select {
+  max-width: none;
+}
 
-    .mobile-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+.phone-detail {
+  display: grid;
+  grid-template-columns: 1fr 160px;
+  gap: 10px;
+}
 
-    .mobile-prefix {
-      width: 60px;
-      height: 48px;
-      border: 1px solid #d6c8bf;
-      border-radius: 10px;
-      background: #f6f6f6;
+.mobile-detail {
+  display: grid;
+  grid-template-columns: 70px 1fr;
+  gap: 10px;
+}
 
-      display: flex;
-      justify-content: center;
-      align-items: center;
+.mobile-prefix {
+  height: 48px;
+  border: 1px solid #d6c8bf;
+  border-radius: 10px;
+  background: #f6f6f6;
 
-      font-weight: 600;
-    }
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-    .mobile-row input {
-      flex: 1;
-    }
+  font-weight: 600;
+}
+
+.hidden {
+  display: none !important;
+}
 
 @media (max-width: 600px) {
   .phone-row {
     grid-template-columns: 1fr;
   }
-}
 
-    @media (max-width: 600px) {
-      .email-row {
-        grid-template-columns: 1fr;
-      }
-    }
+  .phone-detail,
+  .mobile-detail {
+    grid-template-columns: 1fr;
+  }
+}
   </style>
 </head>
 
@@ -504,29 +508,34 @@ textarea {
     </select>
 
    <!-- 市話 -->
-  <input
-      id="landlineInput"
-      type="tel"
-      name="phone_number"
-      placeholder="請輸入電話號碼">
-
-  <!-- 手機 -->
-  <div id="mobileBox" class="hidden mobile-row">
-      <span class="mobile-prefix">09</span>
-
-      <input
-          type="tel"
-          id="mobileInput"
-          maxlength="8"
-          placeholder="請輸入後8碼">
-  </div>
+  <div id="landlineBox" class="phone-detail">
 
     <input
-      id="extInput"
-      type="text"
-      name="phone_ext"
-      placeholder="分機"
-    >
+        id="landlineInput"
+        type="tel"
+        name="phone_number"
+        placeholder="請輸入電話號碼">
+
+    <input
+        id="extInput"
+        type="text"
+        name="phone_ext"
+        placeholder="分機">
+
+</div>
+
+  <!-- 手機 -->
+  <div id="mobileBox" class="mobile-detail hidden">
+
+    <span class="mobile-prefix">09</span>
+
+    <input
+        id="mobileInput"
+        type="tel"
+        maxlength="8"
+        placeholder="請輸入後8碼">
+
+</div>
   </div>
 </div>
 
@@ -746,6 +755,7 @@ textarea {
     const mobileBox = document.getElementById("mobileBox");
     const mobileInput = document.getElementById("mobileInput");
     const extInput = document.getElementById("extInput");
+    const landlineBox = document.getElementById("landlineBox");
 
     function toggleOther(selectEl, targetBox, targetInput) {
       if (selectEl.value === '其他') {
@@ -778,11 +788,10 @@ textarea {
       toggleOther(weeklyCount, weeklyOtherBox, weeklyOtherInput);
     });
 
-    phoneType.addEventListener("change", () => {
+   phoneType.addEventListener("change", () => {
   if (phoneType.value === "手機") {
+    landlineBox.classList.add("hidden");
     mobileBox.classList.remove("hidden");
-    landlineInput.classList.add("hidden");
-    extInput.classList.add("hidden");
 
     landlineInput.value = "";
     extInput.value = "";
@@ -791,8 +800,7 @@ textarea {
     landlineInput.required = false;
   } else {
     mobileBox.classList.add("hidden");
-    landlineInput.classList.remove("hidden");
-    extInput.classList.remove("hidden");
+    landlineBox.classList.remove("hidden");
 
     mobileInput.value = "";
 
@@ -966,6 +974,11 @@ mobileInput.addEventListener("input", () => {
         msg.textContent = '已送出成功，我們將由專人確認需求並與您聯繫。';
 
         form.reset();
+        landlineBox.classList.remove("hidden");
+        mobileBox.classList.add("hidden");
+        mobileInput.required = false;
+        landlineInput.required = true;
+        mobileInput.value = "";
 
         cardTraining.classList.add('active');
         cardGroup.classList.remove('active');
