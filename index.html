@@ -349,6 +349,30 @@ textarea {
       max-width: none;
     }
 
+    .mobile-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mobile-prefix {
+      width: 60px;
+      height: 48px;
+      border: 1px solid #d6c8bf;
+      border-radius: 10px;
+      background: #f6f6f6;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      font-weight: 600;
+    }
+
+    .mobile-row input {
+      flex: 1;
+    }
+
 @media (max-width: 600px) {
   .phone-row {
     grid-template-columns: 1fr;
@@ -462,27 +486,43 @@ textarea {
   <label>聯絡電話 *</label>
 
   <div class="phone-row">
-    <select name="phone_area" required>
+    <select id="phoneType" name="phone_type" required>
       <option value="">區碼</option>
       <option value="02">02 台北/新北/基隆</option>
       <option value="03">03 桃園/新竹/宜蘭/花蓮</option>
+      <option value="03">037 苗栗縣</option>
       <option value="04">04 台中/彰化</option>
+      <option value="049">049 南投縣</option>
       <option value="05">05 嘉義/雲林</option>
       <option value="06">06 台南/澎湖</option>
       <option value="07">07 高雄</option>
-      <option value="08">08 屏東/台東</option>
+      <option value="08">08 屏東</option>
       <option value="089">089 台東</option>
+      <option value="0823">0823 金門</option>
+      <option value="0836">0836 馬祖</option>
       <option value="手機">手機</option>
     </select>
 
-    <input
+   <!-- 市話 -->
+  <input
+      id="landlineInput"
       type="tel"
       name="phone_number"
-      required
-      placeholder="請輸入電話號碼"
-    >
+      placeholder="請輸入電話號碼">
+
+  <!-- 手機 -->
+  <div id="mobileBox" class="hidden mobile-row">
+      <span class="mobile-prefix">09</span>
+
+      <input
+          type="tel"
+          id="mobileInput"
+          maxlength="8"
+          placeholder="請輸入後8碼">
+  </div>
 
     <input
+      id="extInput"
       type="text"
       name="phone_ext"
       placeholder="分機"
@@ -701,6 +741,12 @@ textarea {
     const startMonthBox = document.getElementById('startMonthBox');
     const startMonthInput = document.getElementById('startMonthInput');
 
+    const phoneType = document.getElementById("phoneType");
+    const landlineInput = document.getElementById("landlineInput");
+    const mobileBox = document.getElementById("mobileBox");
+    const mobileInput = document.getElementById("mobileInput");
+    const extInput = document.getElementById("extInput");
+
     function toggleOther(selectEl, targetBox, targetInput) {
       if (selectEl.value === '其他') {
         targetBox.classList.remove('hidden');
@@ -731,6 +777,35 @@ textarea {
     weeklyCount.addEventListener('change', () => {
       toggleOther(weeklyCount, weeklyOtherBox, weeklyOtherInput);
     });
+
+    phoneType.addEventListener("change", () => {
+  if (phoneType.value === "手機") {
+    mobileBox.classList.remove("hidden");
+    landlineInput.classList.add("hidden");
+    extInput.classList.add("hidden");
+
+    landlineInput.value = "";
+    extInput.value = "";
+
+    mobileInput.required = true;
+    landlineInput.required = false;
+  } else {
+    mobileBox.classList.add("hidden");
+    landlineInput.classList.remove("hidden");
+    extInput.classList.remove("hidden");
+
+    mobileInput.value = "";
+
+    mobileInput.required = false;
+    landlineInput.required = true;
+  }
+});
+
+mobileInput.addEventListener("input", () => {
+  mobileInput.value = mobileInput.value
+    .replace(/\D/g, "")
+    .slice(0, 8);
+});
 
     startDate.addEventListener('change', () => {
       if (startDate.value === '指定月份') {
@@ -789,6 +864,29 @@ textarea {
 
       const formData = new FormData(form);
       const type = formData.get('type');
+
+      let phone = "";
+
+      if (formData.get("phone_type") === "手機") {
+        if (mobileInput.value.length !== 8) {
+          alert("手機號碼請輸入 09 後面的 8 碼數字。");
+
+          submitBtn.disabled = false;
+          submitBtn.textContent = "送出需求";
+          return;
+        }
+
+        phone = "09" + mobileInput.value;
+      } else {
+        phone =
+          formData.get("phone_type") +
+          "-" +
+          formData.get("phone_number");
+
+        if (formData.get("phone_ext")) {
+          phone += " 分機 " + formData.get("phone_ext");
+        }
+      }
       let peopleValue = formData.get('people_count');
       if (peopleValue === '其他') {
         peopleValue = formData.get('people_other') || '其他';
@@ -831,14 +929,7 @@ textarea {
         course_type: formData.getAll('course_type').join('、'),
         company_name: formData.get('company_name'),
         contact_name: formData.get('contact_name'),
-        phone:
-        formData.get('phone_area') +'-' +
-        formData.get('phone_number') +
-        (
-        formData.get('phone_ext')
-      ? ' 分機 ' + formData.get('phone_ext')
-      : ''
-  ),
+        phone: phone,
         email: email,
         people_count: peopleValue,
         total_hours: hoursValue,
