@@ -428,9 +428,15 @@ textarea {
       border-top-color: #3b1f17;
     }
 
-    .course-card:hover .course-tooltip,
-    .course-card.tooltip-open .course-tooltip,
-    .course-card:focus-within .course-tooltip {
+    @media (hover: hover) and (pointer: fine) {
+      .course-card:hover .course-tooltip {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+
+    .course-card.tooltip-open .course-tooltip {
       opacity: 1;
       visibility: visible;
       transform: translateX(-50%) translateY(0);
@@ -596,31 +602,73 @@ textarea {
     }
 
     @media (max-width: 600px) {
+      .course-hint {
+        margin-top: 6px;
+        font-size: 12px;
+        line-height: 1.65;
+      }
+
+      .course-grid {
+        gap: 10px;
+        margin-top: 12px;
+      }
+
+      .course-card {
+        width: 100%;
+        height: auto;
+        min-height: 50px;
+        padding: 11px 14px;
+        border-width: 1.5px;
+        border-radius: 10px;
+        font-size: 15px;
+        line-height: 1.35;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      .course-card > span:first-of-type {
+        display: block;
+        width: 100%;
+        text-align: center;
+      }
+
       .course-tooltip {
         position: static;
-        width: 100%;
-        margin-top: 10px;
-        box-sizing: border-box;
-        transform: none;
         display: none;
+        width: 100%;
+        margin: 9px 0 0;
+        padding: 10px 11px;
+        border-radius: 8px;
+        box-sizing: border-box;
+        background: #f8eee8;
+        color: #5b3428;
+        border: 1px solid #dccbc1;
+        box-shadow: none;
+        font-size: 12.5px;
+        font-weight: 400;
+        line-height: 1.7;
+        text-align: left;
         opacity: 1;
         visibility: visible;
+        transform: none;
+        pointer-events: auto;
       }
 
       .course-tooltip::after {
         display: none;
       }
 
-      .course-card {
-        height: auto;
-        min-height: 62px;
-        flex-direction: column;
-      }
-
       .course-card.tooltip-open .course-tooltip {
         display: block;
       }
 
+      .course-card.active .course-tooltip {
+        background: rgba(255,255,255,.94);
+        color: #4a2118;
+        border-color: rgba(255,255,255,.75);
+      }
     }
 
   </style>
@@ -1114,74 +1162,54 @@ mobileInput.addEventListener("input", () => {
     });
 
     const courseCards = document.querySelectorAll('.course-card');
+    const isMobileCourseView = () => window.matchMedia('(max-width: 600px)').matches;
 
-    function isTouchCourseMode() {
-      return window.matchMedia('(max-width: 600px), (hover: none), (pointer: coarse)').matches;
-    }
-
-    function closeOtherCourseTooltips(currentCard) {
-      courseCards.forEach(card => {
-        if (card !== currentCard) card.classList.remove('tooltip-open');
-      });
-    }
-
-    function toggleCourseSelection(card) {
+    courseCards.forEach(card => {
       const input = card.querySelector('input[name="course_type"]');
       if (!input) return;
 
-      input.checked = !input.checked;
-      card.classList.toggle('active', input.checked);
-      input.dispatchEvent(new Event('change', { bubbles: true }));
-    }
-
-    document.querySelectorAll('input[name="course_type"]').forEach(input => {
       input.addEventListener('change', function () {
-        this.closest('.course-card').classList.toggle('active', this.checked);
+        card.classList.toggle('active', this.checked);
       });
-    });
 
-    courseCards.forEach(card => {
       card.addEventListener('click', function (event) {
+        if (!isMobileCourseView()) return;
+
         event.preventDefault();
+        const isOpen = card.classList.contains('tooltip-open');
 
-        if (isTouchCourseMode()) {
-          const isTooltipOpen = this.classList.contains('tooltip-open');
-
-          // 手機版第一次點擊：只顯示課程說明，不勾選。
-          if (!isTooltipOpen) {
-            closeOtherCourseTooltips(this);
-            this.classList.add('tooltip-open');
-            return;
-          }
-
-          // 手機版第二次點擊：勾選或取消勾選，並保留說明。
-          toggleCourseSelection(this);
+        if (!isOpen) {
+          courseCards.forEach(otherCard => {
+            if (otherCard !== card) otherCard.classList.remove('tooltip-open');
+          });
+          card.classList.add('tooltip-open');
           return;
         }
 
-        // 電腦版：滑鼠停留顯示說明，點一下直接勾選或取消。
-        toggleCourseSelection(this);
+        input.checked = !input.checked;
+        input.dispatchEvent(new Event('change', { bubbles: true }));
       });
 
       card.addEventListener('keydown', function (event) {
         if (event.key !== 'Enter' && event.key !== ' ') return;
-
         event.preventDefault();
 
-        if (isTouchCourseMode() && !this.classList.contains('tooltip-open')) {
-          closeOtherCourseTooltips(this);
-          this.classList.add('tooltip-open');
+        if (isMobileCourseView() && !card.classList.contains('tooltip-open')) {
+          courseCards.forEach(otherCard => {
+            if (otherCard !== card) otherCard.classList.remove('tooltip-open');
+          });
+          card.classList.add('tooltip-open');
           return;
         }
 
-        toggleCourseSelection(this);
+        input.checked = !input.checked;
+        input.dispatchEvent(new Event('change', { bubbles: true }));
       });
     });
 
     document.addEventListener('click', function (event) {
-      if (!event.target.closest('.course-card')) {
-        courseCards.forEach(card => card.classList.remove('tooltip-open'));
-      }
+      if (!isMobileCourseView() || event.target.closest('.course-card')) return;
+      courseCards.forEach(card => card.classList.remove('tooltip-open'));
     });
 
     document.querySelectorAll('input[name="type"]').forEach(radio => {
