@@ -601,6 +601,7 @@ textarea {
       }
     }
 
+    /* 手機版課程說明：使用下方彈出視窗，卡片維持小尺寸 */
     @media (max-width: 600px) {
       .course-hint {
         margin-top: 6px;
@@ -609,23 +610,37 @@ textarea {
       }
 
       .course-grid {
-        gap: 10px;
+        gap: 8px;
         margin-top: 12px;
       }
 
       .course-card {
         width: 100%;
-        height: auto;
-        min-height: 50px;
-        padding: 11px 14px;
+        height: 48px;
+        min-height: 48px;
+        padding: 8px 40px 8px 12px;
         border-width: 1.5px;
-        border-radius: 10px;
+        border-radius: 9px;
         font-size: 15px;
-        line-height: 1.35;
-        flex-direction: column;
-        align-items: stretch;
-        justify-content: center;
+        line-height: 1.25;
         overflow: hidden;
+      }
+
+      .course-card::after {
+        content: "ⓘ";
+        position: absolute;
+        right: 13px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #9a7567;
+        font-size: 16px;
+        font-weight: 400;
+      }
+
+      .course-card.active::after {
+        content: "✓";
+        color: #fff;
+        font-weight: 800;
       }
 
       .course-card > span:first-of-type {
@@ -635,40 +650,115 @@ textarea {
       }
 
       .course-tooltip {
-        position: static;
-        display: none;
-        width: 100%;
-        margin: 9px 0 0;
-        padding: 10px 11px;
-        border-radius: 8px;
-        box-sizing: border-box;
-        background: #f8eee8;
-        color: #5b3428;
-        border: 1px solid #dccbc1;
-        box-shadow: none;
-        font-size: 12.5px;
-        font-weight: 400;
-        line-height: 1.7;
-        text-align: left;
-        opacity: 1;
-        visibility: visible;
-        transform: none;
-        pointer-events: auto;
+        display: none !important;
       }
+    }
 
-      .course-tooltip::after {
-        display: none;
-      }
+    .course-sheet-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 16px;
+      box-sizing: border-box;
+      background: rgba(35, 20, 15, .46);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity .2s ease, visibility .2s ease;
+    }
 
-      .course-card.tooltip-open .course-tooltip {
-        display: block;
-      }
+    .course-sheet-backdrop.open {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
 
-      .course-card.active .course-tooltip {
-        background: rgba(255,255,255,.94);
-        color: #4a2118;
-        border-color: rgba(255,255,255,.75);
-      }
+    .course-sheet {
+      width: min(100%, 520px);
+      max-height: min(76vh, 560px);
+      overflow-y: auto;
+      padding: 20px;
+      box-sizing: border-box;
+      border-radius: 18px 18px 14px 14px;
+      background: #fffaf6;
+      box-shadow: 0 -12px 40px rgba(35, 20, 15, .25);
+      transform: translateY(24px);
+      transition: transform .22s ease;
+    }
+
+    .course-sheet-backdrop.open .course-sheet {
+      transform: translateY(0);
+    }
+
+    .course-sheet-handle {
+      width: 42px;
+      height: 4px;
+      margin: -5px auto 16px;
+      border-radius: 999px;
+      background: #d5c4ba;
+    }
+
+    .course-sheet-title {
+      margin: 0 38px 12px 0;
+      color: #4a2118;
+      font-size: 21px;
+      line-height: 1.35;
+    }
+
+    .course-sheet-text {
+      margin: 0;
+      color: #69483c;
+      font-size: 15px;
+      line-height: 1.8;
+      text-align: left;
+    }
+
+    .course-sheet-close {
+      position: absolute;
+      top: 13px;
+      right: 14px;
+      width: 36px;
+      height: 36px;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: #f0e5df;
+      color: #4a2118;
+      font-size: 23px;
+      line-height: 1;
+    }
+
+    .course-sheet {
+      position: relative;
+    }
+
+    .course-sheet-actions {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .course-sheet-actions button {
+      width: 100%;
+      min-height: 46px;
+      margin: 0;
+      padding: 10px 12px;
+      border-radius: 10px;
+      font-size: 15px;
+    }
+
+    .course-sheet-cancel {
+      background: #eee3dc;
+      color: #4a2118;
+    }
+
+    .course-sheet-select.selected {
+      background: #a9764c;
     }
 
   </style>
@@ -706,7 +796,7 @@ textarea {
 
       <div class="section">
         <label>課程種類 *（可複選）</label>
-        <div class="course-hint">電腦版可將滑鼠停留在課程上查看說明；手機版第一次點擊查看說明，第二次點擊選取課程。</div>
+        <div class="course-hint">電腦版可將滑鼠停留在課程上查看說明；手機版點擊課程後，可在說明視窗中選擇課程。</div>
 
         <div class="course-grid">
           <label class="course-card" tabindex="0">
@@ -1004,6 +1094,20 @@ textarea {
 
 
 
+
+  <div class="course-sheet-backdrop" id="courseSheetBackdrop" aria-hidden="true">
+    <section class="course-sheet" role="dialog" aria-modal="true" aria-labelledby="courseSheetTitle">
+      <div class="course-sheet-handle"></div>
+      <button type="button" class="course-sheet-close" id="courseSheetClose" aria-label="關閉課程說明">×</button>
+      <h2 class="course-sheet-title" id="courseSheetTitle"></h2>
+      <p class="course-sheet-text" id="courseSheetText"></p>
+      <div class="course-sheet-actions">
+        <button type="button" class="course-sheet-cancel" id="courseSheetCancel">返回</button>
+        <button type="button" class="course-sheet-select" id="courseSheetSelect">選擇這堂課</button>
+      </div>
+    </section>
+  </div>
+
   <!-- 右下角浮動聯絡按鈕：請將 LINE 連結與電話換成正式資料 -->
   <nav class="floating-tools" aria-label="快速聯絡工具">
     <a class="floating-tool floating-line"
@@ -1163,6 +1267,40 @@ mobileInput.addEventListener("input", () => {
 
     const courseCards = document.querySelectorAll('.course-card');
     const isMobileCourseView = () => window.matchMedia('(max-width: 600px)').matches;
+    const courseSheetBackdrop = document.getElementById('courseSheetBackdrop');
+    const courseSheetTitle = document.getElementById('courseSheetTitle');
+    const courseSheetText = document.getElementById('courseSheetText');
+    const courseSheetClose = document.getElementById('courseSheetClose');
+    const courseSheetCancel = document.getElementById('courseSheetCancel');
+    const courseSheetSelect = document.getElementById('courseSheetSelect');
+    let currentCourseCard = null;
+
+    function updateCourseSheetButton() {
+      if (!currentCourseCard) return;
+      const input = currentCourseCard.querySelector('input[name="course_type"]');
+      const selected = input.checked;
+      courseSheetSelect.textContent = selected ? '取消選擇這堂課' : '選擇這堂課';
+      courseSheetSelect.classList.toggle('selected', selected);
+    }
+
+    function openCourseSheet(card) {
+      const title = card.querySelector(':scope > span:first-of-type');
+      const tooltip = card.querySelector('.course-tooltip');
+      currentCourseCard = card;
+      courseSheetTitle.textContent = title ? title.textContent.trim() : '課程說明';
+      courseSheetText.textContent = tooltip ? tooltip.textContent.trim() : '';
+      updateCourseSheetButton();
+      courseSheetBackdrop.classList.add('open');
+      courseSheetBackdrop.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeCourseSheet() {
+      courseSheetBackdrop.classList.remove('open');
+      courseSheetBackdrop.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      currentCourseCard = null;
+    }
 
     courseCards.forEach(card => {
       const input = card.querySelector('input[name="course_type"]');
@@ -1174,42 +1312,42 @@ mobileInput.addEventListener("input", () => {
 
       card.addEventListener('click', function (event) {
         if (!isMobileCourseView()) return;
-
         event.preventDefault();
-        const isOpen = card.classList.contains('tooltip-open');
-
-        if (!isOpen) {
-          courseCards.forEach(otherCard => {
-            if (otherCard !== card) otherCard.classList.remove('tooltip-open');
-          });
-          card.classList.add('tooltip-open');
-          return;
-        }
-
-        input.checked = !input.checked;
-        input.dispatchEvent(new Event('change', { bubbles: true }));
+        openCourseSheet(card);
       });
 
       card.addEventListener('keydown', function (event) {
         if (event.key !== 'Enter' && event.key !== ' ') return;
         event.preventDefault();
 
-        if (isMobileCourseView() && !card.classList.contains('tooltip-open')) {
-          courseCards.forEach(otherCard => {
-            if (otherCard !== card) otherCard.classList.remove('tooltip-open');
-          });
-          card.classList.add('tooltip-open');
-          return;
+        if (isMobileCourseView()) {
+          openCourseSheet(card);
+        } else {
+          input.checked = !input.checked;
+          input.dispatchEvent(new Event('change', { bubbles: true }));
         }
-
-        input.checked = !input.checked;
-        input.dispatchEvent(new Event('change', { bubbles: true }));
       });
     });
 
-    document.addEventListener('click', function (event) {
-      if (!isMobileCourseView() || event.target.closest('.course-card')) return;
-      courseCards.forEach(card => card.classList.remove('tooltip-open'));
+    courseSheetSelect.addEventListener('click', function () {
+      if (!currentCourseCard) return;
+      const input = currentCourseCard.querySelector('input[name="course_type"]');
+      input.checked = !input.checked;
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+      updateCourseSheetButton();
+    });
+
+    courseSheetClose.addEventListener('click', closeCourseSheet);
+    courseSheetCancel.addEventListener('click', closeCourseSheet);
+
+    courseSheetBackdrop.addEventListener('click', function (event) {
+      if (event.target === courseSheetBackdrop) closeCourseSheet();
+    });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape' && courseSheetBackdrop.classList.contains('open')) {
+        closeCourseSheet();
+      }
     });
 
     document.querySelectorAll('input[name="type"]').forEach(radio => {
