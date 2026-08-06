@@ -658,7 +658,7 @@ textarea {
 
       <div class="section">
         <label>課程種類 *（可複選）</label>
-        <div class="course-hint">電腦版可將滑鼠停留在課程上查看說明；手機版請點一下課程卡片。</div>
+        <div class="course-hint">電腦版可將滑鼠停留在課程上查看說明；手機版第一次點擊查看說明，第二次點擊選取課程。</div>
 
         <div class="course-grid">
           <label class="course-card" tabindex="0">
@@ -1113,30 +1113,75 @@ mobileInput.addEventListener("input", () => {
       }
     });
 
+    const courseCards = document.querySelectorAll('.course-card');
+
+    function isTouchCourseMode() {
+      return window.matchMedia('(max-width: 600px), (hover: none), (pointer: coarse)').matches;
+    }
+
+    function closeOtherCourseTooltips(currentCard) {
+      courseCards.forEach(card => {
+        if (card !== currentCard) card.classList.remove('tooltip-open');
+      });
+    }
+
+    function toggleCourseSelection(card) {
+      const input = card.querySelector('input[name="course_type"]');
+      if (!input) return;
+
+      input.checked = !input.checked;
+      card.classList.toggle('active', input.checked);
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    }
+
     document.querySelectorAll('input[name="course_type"]').forEach(input => {
       input.addEventListener('change', function () {
         this.closest('.course-card').classList.toggle('active', this.checked);
       });
     });
 
-    // 手機／觸控裝置：點一下顯示課程說明；再次點擊可收合
-    document.querySelectorAll('.course-card').forEach(card => {
+    courseCards.forEach(card => {
       card.addEventListener('click', function (event) {
-        if (window.matchMedia('(max-width: 600px)').matches) {
-          document.querySelectorAll('.course-card.tooltip-open').forEach(openCard => {
-            if (openCard !== this) openCard.classList.remove('tooltip-open');
-          });
-          this.classList.toggle('tooltip-open');
+        event.preventDefault();
+
+        if (isTouchCourseMode()) {
+          const isTooltipOpen = this.classList.contains('tooltip-open');
+
+          // 手機版第一次點擊：只顯示課程說明，不勾選。
+          if (!isTooltipOpen) {
+            closeOtherCourseTooltips(this);
+            this.classList.add('tooltip-open');
+            return;
+          }
+
+          // 手機版第二次點擊：勾選或取消勾選，並保留說明。
+          toggleCourseSelection(this);
+          return;
         }
+
+        // 電腦版：滑鼠停留顯示說明，點一下直接勾選或取消。
+        toggleCourseSelection(this);
       });
 
       card.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          this.querySelector('input').click();
-          this.classList.toggle('tooltip-open');
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+
+        event.preventDefault();
+
+        if (isTouchCourseMode() && !this.classList.contains('tooltip-open')) {
+          closeOtherCourseTooltips(this);
+          this.classList.add('tooltip-open');
+          return;
         }
+
+        toggleCourseSelection(this);
       });
+    });
+
+    document.addEventListener('click', function (event) {
+      if (!event.target.closest('.course-card')) {
+        courseCards.forEach(card => card.classList.remove('tooltip-open'));
+      }
     });
 
     document.querySelectorAll('input[name="type"]').forEach(radio => {
@@ -1319,7 +1364,7 @@ mobileInput.addEventListener("input", () => {
         startMonthInput.value = '';
 
         document.querySelectorAll('.course-card').forEach(card => {
-          card.classList.remove('active');
+          card.classList.remove('active', 'tooltip-open');
         });
 
       } catch (error) {
